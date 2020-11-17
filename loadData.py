@@ -1,13 +1,15 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 import cv2
 import random
-
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
 
 
 CATEGORIES = ["star", "galaxy"]
-IMGSIZE = 512
+IMGSIZE = 64
+
+
 
 
 
@@ -91,3 +93,36 @@ def createTestingData():
     testing_data.clear()
 
     return test_X, test_Y
+
+
+
+###################################
+####### DATA PREPROCESSING ########
+###################################
+
+def dataPreProcessing():
+    #Load Data
+    train_X, train_Y = createTrainingData()
+    test_X, test_Y = createTestingData()
+
+    #Reshape the array into a 3 dimension matrix
+    train_X = train_X.reshape(-1, IMGSIZE, IMGSIZE, 1)
+    test_X = test_X.reshape(-1, IMGSIZE, IMGSIZE, 1)
+
+    #Convert type of data from int8 to float32
+    train_X = train_X.astype('float32')
+    test_X = test_X.astype('float32')
+
+    #Change the image to black and white (0 and 1 pixel)
+    train_X = train_X / 255
+    test_X = test_X / 255
+
+    #Convert category to one-hot encoding vector
+    train_Y_one_hot = to_categorical(train_Y)
+    test_Y_one_hot = to_categorical(test_Y)
+
+    #Split the training data into 80% of training and 20% of validation
+    train_X,valid_X,train_label,valid_label = train_test_split(train_X, train_Y_one_hot, test_size=0.2, random_state=20)
+
+    return train_X,valid_X,train_label,valid_label, test_X, train_Y_one_hot, test_Y_one_hot
+
