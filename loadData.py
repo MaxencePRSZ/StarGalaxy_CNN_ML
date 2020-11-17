@@ -3,6 +3,7 @@ import os
 import cv2
 import random
 from keras.utils import to_categorical
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
 
@@ -26,7 +27,7 @@ def createTrainingData():
         #getting index of each category
         classnum = CATEGORIES.index(cat)
         #going through each image
-        for img in os.listdir(path)[:100]:
+        for img in os.listdir(path):
             try:
                 #Reading and giving a gray scale
                 img_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_GRAYSCALE)
@@ -67,7 +68,7 @@ def createTestingData():
         #getting index of each category
         classnum = CATEGORIES.index(cat)
         #going through each image
-        for img in os.listdir(path)[:100]:
+        for img in os.listdir(path):
             try:
                 #Reading and giving a gray scale
                 img_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_GRAYSCALE)
@@ -108,12 +109,12 @@ def dataPreProcessing():
     #Reshape the array into a 3 dimension matrix
     train_X = train_X.reshape(-1, IMGSIZE, IMGSIZE, 1)
     test_X = test_X.reshape(-1, IMGSIZE, IMGSIZE, 1)
-
+    print(train_X.shape, test_X.shape)
     #Convert type of data from int8 to float32
     train_X = train_X.astype('float32')
     test_X = test_X.astype('float32')
 
-    #Change the image to black and white (0 and 1 pixel)
+    #Change the image to make pixels onto the 0 and 1 interval
     train_X = train_X / 255
     test_X = test_X / 255
 

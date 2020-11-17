@@ -44,7 +44,7 @@ def createModel():
 
 def trainModel(train_X, train_label, valid_X, valid_label, test_X, train_X_one_hot, test_Y_one_hot):
     fashion_model = createModel()
-    fashion_train = fashion_model.fit(train_X, train_label, batch_size=BACTH_SIZE,epochs=EPOCHS,verbose=1,validation_data=(valid_X, valid_label))
+    fashion_train = fashion_model.fit(train_X, train_label, batch_size=BACTH_SIZE,epochs=EPOCHS,verbose=1, shuffle=True, validation_data=(valid_X, valid_label))
 
     evaluateModel(fashion_train)
 
